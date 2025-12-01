@@ -1,54 +1,57 @@
-[ M Therapy ] 
+MTherapy
+Mental Health Risk Prediction & Intervention Effect Simulation
+DS6 Mental Health Datathon – Final Submission
 
-Mental Health Risk Prediction & Intervention Effect Simulation  
-**Mental Health Datathon – Final Submission**
+본 프로젝트는 학생 정신건강 위험도 예측 모델을 구축하고,
+여러 정책 개입 시나리오를 적용했을 때 실제 우울 위험도가 얼마나 감소하는지
+'보호효과(Protection Effect)'를 정량적으로 산출하는 것을 목표로 한다.
 
-본 프로젝트는 학생·직장인의 정신건강 위험도를 예측하고,  
-세 가지 정책 개입 시나리오를 적용했을 때 우울 위험도 감소 효과(Protection Effect) 를 
-정량적으로 분석한 모델 기반 접근입니다.
+Dataset: 인도 학생 정신건강 설문 (DS6 Datathon 제공)
+Period: 2025.11.26 ~ 2025.11.28 (3일)
+Team: M Therapy (혜영 · 기화 · 성현 · 현진)
 
 ---
 
  1. Problem Definition
 
-최근 청년층 정신건강 악화가 사회·기업의 핵심 문제로 대두되고 있습니다.  
-특히 "재정 스트레스, 학업·업무 압박, 수면 부족"은 주요 위험 요인으로 알려져 있습니다.
+청소년 정신건강 문제는 인도뿐 아니라 전세계적 사회위험요인으로 부상하고 있다.
+본 데이터톤에서는 다음 질문을 해결하고자 했다:
 
-DS6기 데이터톤에서는 다음 질문에 답하고자 합니다:
+“특정 정책 개입이 실제로 학생의 우울 위험도를 낮추는가?”
 
-“특정 정책 개입이 실제로 정신건강 위험도를 얼마나 줄이는가?” 
-→ 개입 시나리오별 **우울 확률 감소율(Protection Effect)** 정량화
+→ 단순 관찰이 아니라 모델 기반 시뮬레이션으로 효과를 검증.
 
 ---
 
 2. Project Pipeline
 
  1) 데이터 탐색(EDA)
-- Depression Rate Distribution  
-- 학생 vs 직장인 우울 비율  
-- Financial Stress / Sleep Duration / Academic Pressure 등 주요 Feature의 영향 분석  
-→ 발표용 그래프 자동 생성 (fig1 ~ fig4)
+- 우울증 비율(전체/학생/직장인 비교)
+- Feature 영향도: Financial Stress, Sleep Duration, Academic Pressure 등    
+→ 시각화 생성 
 
  2) 예측 모델링 (XGBoost)
-- 전처리: 결측치 처리 + 원핫인코딩  
-- 클래스 불균형 보정(scale_pos_weight)  
+- 전처리: 결측치 처리, 범주형 원핫 인코딩
+- 불균형 보정 : scale_pos_weight  
 - 검증 성능  
   - Accuracy  
-  - Recall / Precision  
-  - ROC-AUC  
-- Confusion Matrix 자동 생성 (fig5)
+  - Precision  
+  - Recall   
+- Confusion Matrix, Feature Importance 생성
 
- 3) 정책 개입 시나리오 정의
+ 3) 정책 개입 시나리오 정의 (학생 중심)
     
-| Scenario           | 조정 Feature                                     | 설명 |
-|---------           |--------------                                   |------|
-| Financial Aid     | Financial Stress ↓ 30% (상위 30%)               | 장학·재정지원 정책 |
-| Sleep Education   | Sleep Duration → “7–8 hours”                   | 수면교육 개입 |
-| Stress Counseling | Academic Pressure ↓20%, Work/Study Hours ↓10% | 상담·스트레스완화 패키지 |
+Scenario	           적용 Feature 변화	                            정책 목적
+Stress Reduction	   Academic/Work Pressure ↓30%, Financial ↓30%	  스트레스 완화
+Sleep Improvement	  Sleep Duration → 7.5h	                        수면 습관 개선
+Healthy Diet	       Dietary Habits → Healthy = 1	                 영양 개선
+Work-Life Balance   Work/Study Hours ↓20%	                        학업부담 완화
+Satisfaction Boost	 Satisfaction +20%	                            심리적 만족 증가
+Comprehensive	      위 5가지 정책 모두 적용	                       종합 개입
 
- 4) 개입 후 우울 확률(W-score) 변화 계산
+ 4) 개입 후 위험도 재산출
      
-    각 시나리오 적용 후 모델 예측 확률(W)을 재산출
+    모델에 시나리오별 입력값을 넣고 예측 확률 비교
 
  5) 보호효과(Protection Effect, PE) 계산
     
@@ -56,13 +59,12 @@ DS6기 데이터톤에서는 다음 질문에 답하고자 합니다:
 
  6) 결과 시각화
     
-  - 시나리오별 보호효과 Bar Chart (fig6)  
-  - 위험도 분포 변화(KDE Plot, fig7)  
-  - 재정 스트레스 타겟팅 그룹별 보호효과 비교(fig8)
+  - 시나리오별 보호효과 Bar Chart  
+  - Student High-risk Group 효과 비교
 
 ---
 
-3. Key Findings
+3. Key Findings (학생 모델 기준)
    
  모델이 발견한 주요 위험 요인
 
@@ -73,13 +75,13 @@ DS6기 데이터톤에서는 다음 질문에 답하고자 합니다:
 
 4. Protection Effect (전체 학생 기준)
 
-| 개입 시나리오 | 위험도 감소율(PE) |
-|---------------|------------------|
-| **Financial Aid (재정 지원)** | **12.7% ↓** |
-| Stress Counseling (상담·스트레스 완화) | 4.3% ↓ |
-| Sleep Education (수면 교육) | 3.0% ↓ |
-
-➡ 특히 **재정 스트레스 상위 30% 집단**에서 PE가 가장 크게 나타남.
+시나리오	            위험도 감소율(PE)	    해석
+Comprehensive	       34.8% ↓	              가장 효과 높음
+Stress Reduction	    27.2% ↓	              단일개입 중 최강
+Healthy Diet	        7.8% ↓	               보조 수준
+Work-Life Balance	   3.1% ↓	               단독효과 낮음
+Satisfaction Boost	  0%	                   영향 없음
+Sleep Improvement	   -1.6% (악화)	         단독으로는 반효과
 
 ---
 
@@ -93,46 +95,34 @@ DS6기 데이터톤에서는 다음 질문에 답하고자 합니다:
         seaborn
         xgboost
 
-     ✔ Run on Google Colab
-        1. `datathon_Mtherapy_final.ipynb` 업로드
+   ✔ Run on Google Colab / Local
+        1. `Mtherapy_v1.ipynb` 업로드
         2. `train.csv`, `test.csv` 업로드
-        3. `런타임 → 모두 실행`
-        4. 다음 파일들이 자동 생성됨:
-             - `fig1_target_dist.png`  
-             - `fig2_student_worker.png`  
-             - `fig3_financial_stress_dep.png`  
-             - `fig4_sleep_dep_stacked.png`  
-             - `fig5_confusion_matrix.png`  
-             - `fig6_protection_effect.png`  
-             - `fig7_risk_dist_base_vs_fs.png`  
-             - `fig8_pe_by_group_fs.png`  
-             - `submission_example.csv`
+        3. `Mtherapy_v1_simulation_PE.ipynb` 업로드
+        4. `Mtherapy_DataAnalysis.ipynb` 업로드
+        5. `런타임 → 모두 실행`
              
   6. File Structure
 
         MTherapy/
-            │── datathon_Mtherapy_final.ipynb
+            │── Mtherapy_v1.ipynb
             │── train.csv
             │── test.csv
-            │── submission_example.csv
-            │── fig1_target_dist.png
-            │── fig2_student_worker.png
-            │── fig3_financial_stress_dep.png
-            │── fig4_sleep_dep_stacked.png
-            │── fig5_confusion_matrix.png
-            │── fig6_protection_effect.png
-            │── fig7_risk_dist_base_vs_fs.png
-            │── fig8_pe_by_group_fs.png
+            │── Mtherapy_v1_simulation_PE.ipynb
+            │── Mtherapy_DataAnalysis.ipynb
+            │── 발표자료_Mtherapy_v1.png
             └── README.md (현재 파일)
-  7. Conclusion
+     
+  8. Conclusion
 
-  본 프로젝트는 [정책 개입에 따른 우울 위험도 감소 효과를 정량적으로 분석]하여  
-  사회·교육·기업 영역에서 실제 적용 가능한 인사이트를 제시하고자 하였습니다.
+  본 프로젝트는 단순 예측을 넘어 정책 개입에 따른 위험도 변화까지 시뮬레이션함으로써
+  실제 교육행정·사회정책에서 활용 가능한 근거 기반 모델링을 제공하였다.
   
   특히,
-         “재정 스트레스 상위 집단 타겟팅”이 가장 높은 효율  
-        ML 기반 위험도 예측 + 정책효과 시뮬레이션으로 의사결정 지원 가능
-
+         “고위험군 타겟팅 + 스트레스 완화 패키지”가 가장 강력한 효과
+         종합개입 시 정책효율이 2–3배 상승
+         ML 기반 정책효과 분석은 향후 정교한 의사결정에 필수
+         
 ---
 본 분석은 모두연구소 DS6기 Datathon 참가 목적으로 작성되었습니다.
 Mental Health Datathon에서 제공된 데이터셋을 기반으로 수행하였으며,
