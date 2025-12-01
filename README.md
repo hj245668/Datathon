@@ -42,11 +42,11 @@ Team: M Therapy (혜영 · 기화 · 성현 · 현진)
  3) 정책 개입 시나리오 정의 (학생 중심)
     
 Scenario	           적용 Feature 변화	                            정책 목적
-Stress Reduction	   Academic/Work Pressure ↓30%, Financial ↓30%	  스트레스 완화
+Stress Reduction	   Academic/Work Pressure ↓, Financial ↓      	  스트레스 완화
 Sleep Improvement	  Sleep Duration → 7.5h	                        수면 습관 개선
 Healthy Diet	       Dietary Habits → Healthy = 1	                 영양 개선
-Work-Life Balance   Work/Study Hours ↓20%	                        학업부담 완화
-Satisfaction Boost	 Satisfaction +20%	                            심리적 만족 증가
+Work-Life Balance   Work/Study Hours ↓   	                        학업부담 완화
+Satisfaction Boost	 Satisfaction +   	                            심리적 만족 증가
 Comprehensive	      위 5가지 정책 모두 적용	                       종합 개입
 
  4) 개입 후 위험도 재산출
@@ -55,7 +55,7 @@ Comprehensive	      위 5가지 정책 모두 적용	                       종�
 
  5) 보호효과(Protection Effect, PE) 계산
     
-  PE =  ((W_base - W_scenario)/ W_base )) * 100
+  PE =  ((Baseline Risk − Intervention Risk)/ Baseline Risk )) * 100
 
  6) 결과 시각화
     
